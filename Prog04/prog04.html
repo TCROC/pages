@@ -72,19 +72,17 @@
 		var tableHeaders = ["Local Name", "Local DOB", "Local Age", "Local Zodiac"]
 		var chineseZodiacSigns = ["Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"]
 
-		class WesternZodiac {
-			constructor(name, startMonth, startDay, endMonth, endDay) {
-				this.name = name;
-				this.startMonth = startMonth;
-				this.startDay = startDay;
-				this.endMonth = endMonth;
-				this.endDay = endDay;
-			}
+        function WesternZodiac(name, startMonth, startDay, endMonth, endDay) {
+            this.name = name;
+            this.startMonth = startMonth;
+            this.startDay = startDay;
+            this.endMonth = endMonth;
+            this.endDay = endDay;
 
-			isValid(month, day) {
-				return month >= startMonth && month >= starDay && month <= endMonth && month <= endDay;
-			}
-		}
+            this.isValid = function (month, day) {
+                return (month == startMonth && day >= startDay) || (month == endMonth && day <= endDay);
+            }
+        }
 
 		var aries = new WesternZodiac("Aries", 3, 21, 4, 19);
 		var taurus = new WesternZodiac("Taurus", 4, 20, 5, 20);
@@ -331,8 +329,8 @@
 
 		function calculateWesterZodiac(monthBorn, dayBorn) {
 			for (var i = 0; i < westerZodiacSigns.length; i++) {
-				element = westerZodiacSigns[i];
-				if ((monthBorn == element.startMonth && dayBorn >= element.startDay) || (monthBorn == element.endMonth && dayBorn <= element.endDay)) {
+                element = westerZodiacSigns[i];
+                if (element.isValid(monthBorn, dayBorn)) {
 					return element.name;
 				}
 			}
