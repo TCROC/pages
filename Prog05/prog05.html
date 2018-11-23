@@ -1,0 +1,345 @@
+<!doctype html>
+<html>
+
+<link href="..\Bootstrap\css\bootstrap.min.css" rel="stylesheet">
+<link href="prog05.css" rel="stylesheet">
+
+<head>
+	<style>
+		label {
+			width: 60px;
+			text-align: right;
+			padding-right: 5px;
+			display: inline-block;
+		}
+		input[type="number"] {
+			width:50px;
+			margin-right: 25px;
+		}
+		</style>
+</head>
+
+<body onload="addForm();">
+
+	<div class="container">
+		<h1>Add new input lines to HTML entry form</h1>
+
+		<p>Enable users to add a row of fields to an HTML input form. In this code, after the HTML loads, addForm() is
+			called.
+			Clicking the Add Line button calls a function, addLine(), which calls addInput() once for each field in the new
+			input
+			line. The elements, label and input, are formatted using CSS. </p>
+
+		<button type="button" onclick="addLine();">Add Line</button>
+		<br />
+		<br />
+
+		<div id="div1">
+		</div>
+
+		<h1>Generate array of objects</h1>
+
+		<p>Loop through the HTML form lines and store the data into an array of objects, where each property of an object
+			contains the data in the input field of the HTML entry form. </p>
+
+		<button type="button" onclick="genObjectArray();">Generate and Display Array of Objects</button>
+		<br />
+
+		<div id="div2">
+		</div>
+
+		<h1>Display table containing data from array of objects</h1>
+
+		<p>Loop through the HTML form lines and store the data into an array of objects, where each property of an object
+			contains the data in the input field of the HTML entry form. </p>
+
+		<button type="button" onclick="generateTable();">Generate and Display Table</button>
+		<br />
+		<br />
+
+		<div id="div3">
+		</div>
+	</div>
+
+	<script>
+
+		// GLOBAL VARIABLES
+
+		var currentLine = 0;
+		var inputWidth = 10;
+		var objArray = [];
+		var countries = ["USA", "China"];
+		var tableHeaders = ["Local Name", "Local DOB", "Local Age", "Local Zodiac"]
+		var chineseZodiacSigns = ["Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"]
+
+		class WesternZodiac {
+			constructor(name, startMonth, startDay, endMonth, endDay) {
+				this.name = name;
+				this.startMonth = startMonth;
+				this.startDay = startDay;
+				this.endMonth = endMonth;
+				this.endDay = endDay;
+			}
+
+			isValid(month, day) {
+				return month >= startMonth && month >= starDay && month <= endMonth && month <= endDay;
+			}
+		}
+
+		var aries = new WesternZodiac("Aries", 3, 21, 4, 19);
+		var taurus = new WesternZodiac("Taurus", 4, 20, 5, 20);
+		var gemini = new WesternZodiac("Gemini", 5, 21, 6, 20);
+		var cancer = new WesternZodiac("Cancer", 6, 21, 7, 22);
+		var leo = new WesternZodiac("Leo", 7, 23, 8, 22);
+		var virgo = new WesternZodiac("Virgo", 8, 23, 9, 22);
+		var libra = new WesternZodiac("Libra", 9, 23, 10, 22);
+		var scorpio = new WesternZodiac("Scorpio", 10, 23, 11, 21);
+		var sagittarius = new WesternZodiac("Sagittarius", 11, 22, 12, 21);
+		var capricorn = new WesternZodiac("Capricorn", 12, 22, 1, 19);
+		var aquarius = new WesternZodiac("Aquarius", 1, 20, 2, 18);
+		var pisces = new WesternZodiac("Pisces", 2, 19, 3, 20);
+
+		var westerZodiacSigns = [aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces]
+
+		// FUNCTIONS
+
+		/* addForm()
+		 * appends an entry form to an HTML element with id="div1"
+		 */
+		function addForm() {
+			// precondition: HTML must contain <div id="div1"> element
+
+			// create a new form element, and append to div1
+			var newelement = document.createElement("form");
+			newelement.setAttribute("id", "form1");
+			var div1 = document.getElementById("div1");
+			div1.appendChild(newelement);
+
+			// create a new fieldset element, and append to form1
+			var newelement = document.createElement("fieldset");
+			newelement.setAttribute("id", "fieldset1");
+			var form1 = document.getElementById("form1");
+			form1.appendChild(newelement);
+
+			// create a new legend element, and append to fieldset1
+			var newelement = document.createElement("legend");
+			var textnode = document.createTextNode("People ");
+			newelement.appendChild(textnode);
+			var fieldset1 = document.getElementById("fieldset1");
+			fieldset1.appendChild(newelement);
+
+			addLine();
+		}
+
+		/* addLine()
+		 * inserts all labels and input elements for one row of a form
+		 */
+		function addLine() {
+			// precondition: inputWidth global variable must be set
+			// precondition: call from addForm() so HTML element with id="fieldset1" exists
+
+			addInput("fieldset1", "fname", "Given Name", "text", "Jane", inputWidth);
+			addInput("fieldset1", "lname", "Surname", "text", "Doe", inputWidth);
+			addInput("fieldset1", "bday", "Solar Birth Day", "number", "1", inputWidth);
+			addInput("fieldset1", "bmonth", "Solar Birth Month", "number", "1", inputWidth);
+			addInput("fieldset1", "byear", "Solar Birth Year", "number", "2018", inputWidth);
+			addSelect("fieldset1", "country", "Country", "text", "USA", inputWidth);
+			var newelement = document.createElement("br");
+			var fieldset1 = document.getElementById("fieldset1");
+			fieldset1.appendChild(newelement);
+			currentLine++;
+		}
+
+		// create a new label element, and append to form (or fieldset)
+		function addLabel(formId, namePrefix, labelText) {
+			var n = document.createElement("label");
+			n.setAttribute("for", namePrefix + currentLine);
+			var t = document.createTextNode(labelText + " ");
+			n.appendChild(t);
+			var f = document.getElementById(formId);
+			f.appendChild(n);
+		}
+
+		/* addInput()
+		 * inserts one label one input element into a row of a form 
+		 */
+		function addInput(formId, namePrefix, labelText, dataType, placeholder, fieldSize) {
+			// precondition: currentLine (global variable) must be set
+			// precondition: objArray[] (global variable) must be declared
+			// precondition: call from addLine() so HTML element with id=formID exists
+
+			addLabel(formId, namePrefix, labelText)
+
+			// create a new input element, and append to form
+			var n = document.createElement("input");
+			n.setAttribute("name", namePrefix + currentLine);
+			n.setAttribute("id", namePrefix + currentLine);
+			n.setAttribute("type", dataType);
+			n.setAttribute("placeholder", placeholder);
+			n.setAttribute("size", fieldSize);
+			var f = document.getElementById(formId);
+			f.appendChild(n);
+		}
+
+		function addSelect(formId, namePrefix, labelText, dataType, placeholder, fieldSize) {
+
+			addLabel(formId, namePrefix, labelText)
+			var n = document.createElement("select");
+			n.setAttribute("name", namePrefix + currentLine);
+			n.setAttribute("id", namePrefix + currentLine);
+			n.setAttribute("type", dataType);
+
+			for (var i = 0; i < countries.length; i++) {
+				var option = document.createElement("option");
+				option.text = countries[i];
+				n.add(option);
+			}
+
+			var f = document.getElementById(formId);
+			f.appendChild(n);
+		}
+
+		/* genObjectArray()
+		 * generates content for an array of objects, 
+		 * where each element of the array 
+		 * is an object containing the data entered in one line of the form 
+		 */
+		function genObjectArray() {
+			// precondition: HTML must contain <div id="div2"> element
+			// precondition: currentLine (global variable) must be set
+
+			// generate objArray from HTML form elements
+
+			for (var i = 0; i < currentLine; i++) {
+				var bdayString = document.getElementById("byear" + i).value.toString() + "/" + document.getElementById("bmonth" + i).value.toString() + "/" + document.getElementById("bday" + i).value.toString();
+
+				objArray[i] = {
+					'fname': document.getElementById("fname" + i).value,
+					'lname': document.getElementById("lname" + i).value,
+					'bday': document.getElementById("bday" + i).value,
+					'bmonth': document.getElementById("bmonth" + i).value,
+					'byear': document.getElementById("byear" + i).value,
+					'country': document.getElementById("country" + i).value,
+					'localDOB': function () {
+						switch (this.country) {
+							case 'China':
+								return this.byear + "-" + this.bmonth + "-" + this.bday;
+							case 'USA':
+								return this.bmonth + "-" + this.bday + "-" + this.byear;
+						}
+					},
+					'localName': function () {
+						switch (this.country) {
+							case 'China':
+								return this.lname + " " + this.fname;
+							case 'USA':
+								return this.fname + " " + this.lname;
+						}
+					},
+					'localAge': function () {
+						switch (this.country) {
+							case 'China':
+								return parseInt(calculateAge(this.byear + "-" + this.bmonth + "-" + this.bday)) + 1;
+							case 'USA':
+								return parseInt(calculateAge(this.byear + "-" + this.bmonth + "-" + this.bday));
+						}
+					},
+					'localZodiac': function () {
+						switch (this.country) {
+							case 'China':
+								return calculateChineseZodiac(parseInt(this.byear));
+							case 'USA':
+								return calculateWesterZodiac(parseInt(this.bmonth), parseInt(this.bday));
+						}
+					}
+				};
+			}
+
+			// display objArray
+			var divContent = "<ol start='0'>";
+			objArray.forEach(function (e) {
+				divContent += '<li>';
+				divContent += JSON.stringify(e);
+				divContent += ' ... localAge() == ' + e.localAge();
+				divContent += '</li>';
+			});
+			divContent += "</ol>";
+			document.getElementById("div2").innerHTML = divContent;
+		}
+
+		function calculateAge(bdayString) {
+			var today = new Date();
+			var birthDate = new Date(bdayString);
+			var age = today.getFullYear() - birthDate.getFullYear();
+			var m = today.getMonth() - birthDate.getMonth();
+
+			// Have we passed the birth month or birth day of this year?
+			if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+				age--;
+			}
+			return age;
+		}
+
+		function generateTable() {
+			initTable();
+			addTableData();
+		}
+
+		/* initTable()
+		 * generates an HTML table containing localized output from the objArray 
+		 */
+		function initTable() {
+			var div3 = document.getElementById("div3");
+			var divContent = "<table class=\"table table-striped\" id=div3Table border=1><thead><tr>"
+			for (var i = 0; i < tableHeaders.length; i++) {
+				divContent += "<th>" + tableHeaders[i] + "</th>";
+			}
+			divContent += "</tr></thead><tbody id=div3TableBody></tbody></table>";
+			div3.innerHTML = divContent;
+			return divContent;
+		}
+
+		function addTableData() {
+			var tableBody = document.getElementById("div3TableBody");
+
+			var divContent = "";
+			for (var i = 0; i < objArray.length; i++) {
+				var obj = objArray[i];
+
+				divContent += "<tr id=" + i + ">";
+
+				divContent += "<td>" + obj.localName(); + "</td>";
+				divContent += "<td>" + obj.localDOB(); + "</td>";
+				divContent += "<td>" + obj.localAge(); + "</td>";
+				divContent += "<td>" + obj.localZodiac(); + "</td>";
+
+				divContent += "</tr>";
+			}
+			tableBody.innerHTML = divContent;
+			return divContent;
+		}
+
+		function calculateChineseZodiac(yearBorn) {
+			var difference = yearBorn - 1968;
+			var remainder = difference % 12;
+			if (remainder == 0 || difference > 0) {
+				return chineseZodiacSigns[remainder];
+			} else {
+				return chineseZodiacSigns[12 + remainder];
+			}
+		}
+
+		function calculateWesterZodiac(monthBorn, dayBorn) {
+			for (var i = 0; i < westerZodiacSigns.length; i++) {
+				element = westerZodiacSigns[i];
+				if ((monthBorn == element.startMonth && dayBorn >= element.startDay) || (monthBorn == element.endMonth && dayBorn <= element.endDay)) {
+					return element.name;
+				}
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>
