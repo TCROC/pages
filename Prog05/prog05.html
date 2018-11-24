@@ -42,7 +42,7 @@
 		<p>Loop through the HTML form lines and store the data into an array of objects, where each property of an object
 			contains the data in the input field of the HTML entry form. </p>
 
-		<button type="button" onclick="generateTable();">Generate and Display Table</button>
+		<button type="button" onclick="tableDiv3.updateTableData('div3');">Generate and Display Table</button>
 		<br />
 		<br />
 
@@ -52,77 +52,118 @@
 
 	<script>
 
-		// GLOBAL VARIABLES
+        Object.prototype.program = "Program 05";
 
-		var inputWidth = 10;
+        class WesternZodiac {
+            constructor(name, startMonth, startDay, endMonth, endDay) {
+                this.name = name;
+                this.startMonth = startMonth;
+                this.startDay = startDay;
+                this.endMonth = endMonth;
+                this.endDay = endDay;
+            }
+            isValid (month, day) {
+                return (month == this.startMonth && day >= this.startDay) || (month == this.endMonth && day <= this.endDay);
+            }
+        }
+
+        class Person {
+            constructor() {
+                var i = people.length;
+                addInput("fieldset1", "fname", "Given Name", "text", "Jane", inputWidth);
+                addInput("fieldset1", "lname", "Surname", "text", "Doe", inputWidth);
+                addInput("fieldset1", "bday", "Solar Birth Day", "number", "1", inputWidth);
+                addInput("fieldset1", "bmonth", "Solar Birth Month", "number", "1", inputWidth);
+                addInput("fieldset1", "byear", "Solar Birth Year", "number", "2018", inputWidth);
+                addSelect("fieldset1", "country", "Country", "text", "USA", inputWidth);
+                var newelement = document.createElement("br");
+                var fieldset1 = document.getElementById("fieldset1");
+                fieldset1.appendChild(newelement);
+
+                this.firstName = function () { return document.getElementById("fname" + i).value; };
+                this.lastName = function () { return document.getElementById("lname" + i).value; };
+                this.bDay = function () { return document.getElementById("bday" + i).value; };
+                this.bMonth = function () { return document.getElementById("bmonth" + i).value; };
+                this.bYear = function () { return document.getElementById("byear" + i).value; };
+                this.country = function () { return document.getElementById("country" + i).value; };
+            }
+        }
+
+        Person.prototype.localDOB = function () {
+            switch (this.country()) {
+                case 'China':
+                    return this.bYear() + "-" + this.bMonth() + "-" + this.bDay();
+                case 'USA':
+                    return this.bMonth() + "-" + this.bDay() + "-" + this.bYear();
+            }
+        };
+        Person.prototype.localName = function () {
+            switch (this.country()) {
+                case 'China':
+                    return this.lastName() + " " + this.firstName();
+                case 'USA':
+                    return this.firstName() + " " + this.lastName();
+            }
+        };
+        Person.prototype.localAge = function () {
+            switch (this.country()) {
+                case 'China':
+                    return parseInt(calculateAge(this.bYear() + "-" + this.bMonth() + "-" + this.bDay())) + 1;
+                case 'USA':
+                    return parseInt(calculateAge(this.bYear() + "-" + this.bMonth() + "-" + this.bDay()));
+            }
+        };
+        Person.prototype.localZodiac = function () {
+            switch (this.country()) {
+                case 'China':
+                    return calculateChineseZodiac(parseInt(this.bYear()));
+                case 'USA':
+                    return calculateWesterZodiac(parseInt(this.bMonth()), parseInt(this.bDay()));
+            }
+        }
+
+        class Table {
+            constructor(divID) {
+                // Creates an instance by value.
+                this.divID = JSON.parse(JSON.stringify(divID));
+
+                var div3 = document.getElementById(this.divID);
+                var divContent = "<table class=\"table table-striped\" id=div3Table border=1><thead><tr>"
+                for (var i = 0; i < tableHeaders.length; i++) {
+                    divContent += "<th>" + tableHeaders[i] + "</th>";
+                }
+                divContent += "</tr></thead><tbody id=div3TableBody></tbody></table>";
+                div3.innerHTML = divContent;
+
+                this.updateTableData = function () {
+                    var tableBody = document.getElementById(this.divID + "TableBody");
+
+                    var divContent = "";
+                    for (var i = 0; i < people.length; i++) {
+                        var obj = people[i];
+
+                        divContent += "<tr id=" + i + ">";
+
+                        divContent += "<td>" + obj.localName(); + "</td>";
+                        divContent += "<td>" + obj.localDOB(); + "</td>";
+                        divContent += "<td>" + obj.localAge(); + "</td>";
+                        divContent += "<td>" + obj.localZodiac(); + "</td>";
+
+                        divContent += "</tr>";
+                    }
+                    tableBody.innerHTML = divContent;
+                }
+            }
+        }
+
+        // GLOBAL VARIABLES
+
+        var inputWidth = 10;
         var people = [];
-		var countries = ["USA", "China"];
-		var tableHeaders = ["Local Name", "Local DOB", "Local Age", "Local Zodiac"]
-		var chineseZodiacSigns = ["Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"]
-
-        function WesternZodiac(name, startMonth, startDay, endMonth, endDay) {
-            this.name = name;
-            this.startMonth = startMonth;
-            this.startDay = startDay;
-            this.endMonth = endMonth;
-            this.endDay = endDay;
-
-            this.isValid = function (month, day) {
-                return (month == startMonth && day >= startDay) || (month == endMonth && day <= endDay);
-            }
-        }
-
-        function Person() {
-            var i = people.length;
-            addInput("fieldset1", "fname", "Given Name", "text", "Jane", inputWidth);
-            addInput("fieldset1", "lname", "Surname", "text", "Doe", inputWidth);
-            addInput("fieldset1", "bday", "Solar Birth Day", "number", "1", inputWidth);
-            addInput("fieldset1", "bmonth", "Solar Birth Month", "number", "1", inputWidth);
-            addInput("fieldset1", "byear", "Solar Birth Year", "number", "2018", inputWidth);
-            addSelect("fieldset1", "country", "Country", "text", "USA", inputWidth);
-            var newelement = document.createElement("br");
-            var fieldset1 = document.getElementById("fieldset1");
-            fieldset1.appendChild(newelement);
-
-            this.firstName = function () { return document.getElementById("fname" + i).value; };
-            this.lastName = function () { return document.getElementById("lname" + i).value; };
-            this.bDay = function () { return document.getElementById("bday" + i).value; };
-            this.bMonth = function () { return document.getElementById("bmonth" + i).value; };
-            this.bYear = function () { return document.getElementById("byear" + i).value; };
-            this.country = function () { return document.getElementById("country" + i).value; };
-            this.localDOB = function () {
-                switch (this.country()) {
-                    case 'China':
-                        return this.bYear() + "-" + this.bMonth() + "-" + this.bDay();
-                    case 'USA':
-                        return this.bMonth() + "-" + this.bDay() + "-" + this.bYear();
-                }
-            };
-            this.localName = function () {
-                switch (this.country()) {
-                    case 'China':
-                        return this.lastName() + " " + this.firstName();
-                    case 'USA':
-                        return this.firstName() + " " + this.lastName();
-                }
-            };
-            this.localAge = function () {
-                switch (this.country()) {
-                    case 'China':
-                        return parseInt(calculateAge(this.bYear() + "-" + this.bMonth() + "-" + this.bDay())) + 1;
-                    case 'USA':
-                        return parseInt(calculateAge(this.bYear() + "-" + this.bMonth() + "-" + this.bDay()));
-                }
-            };
-            this.localZodiac = function () {
-                switch (this.country()) {
-                    case 'China':
-                        return calculateChineseZodiac(parseInt(this.bYear()));
-                    case 'USA':
-                        return calculateWesterZodiac(parseInt(this.bMonth()), parseInt(this.bDay()));
-                }
-            }
-        }
+        var countries = ["USA", "China"];
+        var tableHeaders = ["Local Name", "Local DOB", "Local Age", "Local Zodiac"]
+        var chineseZodiacSigns = ["Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"]
+        var tableDiv3 = new Table("div3");
 
 		var aries = new WesternZodiac("Aries", 3, 21, 4, 19);
 		var taurus = new WesternZodiac("Taurus", 4, 20, 5, 20);
@@ -238,45 +279,6 @@
 				age--;
 			}
 			return age;
-		}
-
-		function generateTable() {
-			initTable();
-			addTableData();
-		}
-
-		/* initTable()
-		 * initializes a table with the appropriate headers
-		 */
-		function initTable() {
-			var div3 = document.getElementById("div3");
-			var divContent = "<table class=\"table table-striped\" id=div3Table border=1><thead><tr>"
-			for (var i = 0; i < tableHeaders.length; i++) {
-				divContent += "<th>" + tableHeaders[i] + "</th>";
-			}
-			divContent += "</tr></thead><tbody id=div3TableBody></tbody></table>";
-			div3.innerHTML = divContent;
-			return divContent;
-		}
-
-		function addTableData() {
-			var tableBody = document.getElementById("div3TableBody");
-
-            var divContent = "";
-            for (var i = 0; i < people.length; i++) {
-                var obj = people[i];
-
-				divContent += "<tr id=" + i + ">";
-
-				divContent += "<td>" + obj.localName(); + "</td>";
-				divContent += "<td>" + obj.localDOB(); + "</td>";
-				divContent += "<td>" + obj.localAge(); + "</td>";
-				divContent += "<td>" + obj.localZodiac(); + "</td>";
-
-				divContent += "</tr>";
-			}
-			tableBody.innerHTML = divContent;
-			return divContent;
 		}
 
 		function calculateChineseZodiac(yearBorn) {
