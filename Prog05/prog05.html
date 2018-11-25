@@ -52,7 +52,11 @@
 
 	<script>
 
-        Object.prototype.program = "Program 05";
+        // CLASS DEFINITIONS
+
+        Object.prototype.program = function () {
+            return "Program 05";
+        }
 
         class WesternZodiac {
             constructor(name, startMonth, startDay, endMonth, endDay) {
@@ -211,12 +215,9 @@
 		}
 
 		/* addPerson()
-		 * inserts all labels and input elements for one row of a form
+		 * Creates a new Person and adds it to the people[]
 		 */
         function addPerson() {
-			// precondition: inputWidth global variable must be set
-			// precondition: call from addForm() so HTML element with id="fieldset1" exists
-
             people.push(new Person());
 		}
 
