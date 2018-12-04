@@ -125,9 +125,9 @@
 
 			addInput("fieldset1", "fname", "Given Name", "text", "Jane", inputWidth);
 			addInput("fieldset1", "lname", "Surname", "text", "Doe", inputWidth);
-			addInput("fieldset1", "bday", "Solar Birth Day", "number", "1", inputWidth);
-			addInput("fieldset1", "bmonth", "Solar Birth Month", "number", "1", inputWidth);
-			addInput("fieldset1", "byear", "Solar Birth Year", "number", "2018", inputWidth);
+			addInput("fieldset1", "bday", "Solar Birth Day", "text", "1", inputWidth);
+			addInput("fieldset1", "bmonth", "Solar Birth Month", "text", "1", inputWidth);
+			addInput("fieldset1", "byear", "Solar Birth Year", "text", "2018", inputWidth);
 			addSelect("fieldset1", "country", "Country", "text", "USA", inputWidth);
 			var newelement = document.createElement("br");
 			var fieldset1 = document.getElementById("fieldset1");
@@ -136,13 +136,12 @@
 		}
 
 		// create a new label element, and append to form (or fieldset)
-		function addLabel(formId, namePrefix, labelText) {
+		function addLabel(formId, namePrefix, labelText, elementToAppendToo) {
 			var n = document.createElement("label");
 			n.setAttribute("for", namePrefix + currentLine);
 			var t = document.createTextNode(labelText + " ");
 			n.appendChild(t);
-			var f = document.getElementById(formId);
-			f.appendChild(n);
+            elementToAppendToo.appendChild(n);
 		}
 
 		/* addInput()
@@ -153,7 +152,11 @@
 			// precondition: objArray[] (global variable) must be declared
 			// precondition: call from addLine() so HTML element with id=formID exists
 
-			addLabel(formId, namePrefix, labelText)
+            var d = document.createElement("div");
+            d.setAttribute("class", "inline")
+            var f = document.getElementById(formId);
+
+			addLabel(formId, namePrefix, labelText, d)
 
 			// create a new input element, and append to form
 			var n = document.createElement("input");
@@ -161,14 +164,20 @@
 			n.setAttribute("id", namePrefix + currentLine);
 			n.setAttribute("type", dataType);
 			n.setAttribute("placeholder", placeholder);
-			n.setAttribute("size", fieldSize);
-			var f = document.getElementById(formId);
-			f.appendChild(n);
+            n.setAttribute("size", fieldSize);
+
+            d.appendChild(n);
+
+			f.appendChild(d);
 		}
 
 		function addSelect(formId, namePrefix, labelText, dataType, placeholder, fieldSize) {
+            var f = document.getElementById(formId);
 
-			addLabel(formId, namePrefix, labelText)
+            var d = document.createElement("div");
+            d.setAttribute("class", "inline")
+
+			addLabel(formId, namePrefix, labelText, d)
 			var n = document.createElement("select");
 			n.setAttribute("name", namePrefix + currentLine);
 			n.setAttribute("id", namePrefix + currentLine);
@@ -180,8 +189,8 @@
 				n.add(option);
 			}
 
-			var f = document.getElementById(formId);
-			f.appendChild(n);
+            d.appendChild(n);
+			f.appendChild(d);
 		}
 
 		/* genObjectArray()
