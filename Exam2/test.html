@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+    </script>
+</head>
+<body>
+    <p id="p01">hi</p>
+
+    <script>
+
+        // Created object
+        var jane = {
+            name: "Jane",
+            birthYear: 1990,
+            age: function () {
+                return 2018 - this.birthYear;
+            }
+        }
+
+        // constructor function
+        function Person (n, by) {
+            this.name = n;
+            
+            // Everyone has the Common cold.
+            this.disease = "Common cold";
+
+            this.birthYear = by;
+            this.age = function () {
+                return 2018 - this.birthYear;
+            };
+        }
+
+        // Created object from constructor
+        var jim = new Person("Jim", 1990);
+        var june = new Person("June", 1990);
+
+        // Method chaining
+        $("#p01").click(function () {
+            $("#p01")
+                .css("background-color", "yellow")
+                .fadeOut("3000");
+        });
+    </script>
+</body>
+</html>
+
