@@ -67,33 +67,33 @@
             </thead>
             <tbody id="output-table"></tbody>
         </table>
-    </div>
 
-    <h2>Things jQuery does differently than JavaScript</h2>
+        <h2>Things jQuery does differently than JavaScript</h2>
 
-    <ol>
-        <li>
-            jQuery can reference elements fasteter and easier with a stamement such as $( "#myId" ), where as vanilla JavaScript has to use something like document.getElementById("myId").
-        </li>
-        <li>
-            jQuery has built in methods for animations and effects like fading in and out with .fadeIn () and .fadeOut(). Vanilla JavaScript would require much more code to achieve such an effect.
-        </li>
-        <li>
-            jQuery can access css code from elements much faster by simply calling .css("cssProperty")</> such as $("#myID").css( "background-color" )</>. Vanilla JavaScript would
-            require something more along the lines of:
-            <br>
+        <ol>
+            <li>
+                jQuery can reference elements fasteter and easier with a stamement such as $( "#myId" ), where as vanilla JavaScript has to use something like document.getElementById("myId").
+            </li>
+            <li>
+                jQuery has built in methods for animations and effects like fading in and out with .fadeIn () and .fadeOut(). Vanilla JavaScript would require much more code to achieve such an effect.
+            </li>
+            <li>
+                jQuery can access css code from elements much faster by simply calling .css("cssProperty")</> such as $("#myID").css( "background-color" )</>. Vanilla JavaScript would
+                require something more along the lines of:
+                <br>
                 var elem = document.getElementById("test");
-            <br>
+                <br>
                 var theCSSprop = window.getComputedStyle(elem, null).getPropertyValue("background-color");
-        </li>
-        <li>
-            jQuery can manipulate the DOM much easier with its built in functions such as .replaceWith() that vanilla JavaScript does not have.
-        </li>
-        <li>
-            jQuery can access events associated with HTML script by something as simple as $("#myId").click(someFunction). Vanilla JavaScript requires a little
-            more code with: document.getElementById("myId").addEventListener("click", someFunction);
-        </li>
-    </ol>
+            </li>
+            <li>
+                jQuery can manipulate the DOM much easier with its built in functions such as .replaceWith() that vanilla JavaScript does not have.
+            </li>
+            <li>
+                jQuery can access events associated with HTML script by something as simple as $("#myId").click(someFunction). Vanilla JavaScript requires a little
+                more code with: document.getElementById("myId").addEventListener("click", someFunction);
+            </li>
+        </ol>
+    </div>
 
     <script>
         var rowCount = 0
